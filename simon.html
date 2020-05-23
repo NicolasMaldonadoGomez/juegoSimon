@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="simon dice, juego simon,juego de mesa,clases,javascript, principiante, fundamentos de javascript">
+        <meta name="description" content="Juego simon dice. Proyecto final clase de fundamentos de javascript. Hecho en HTML, CSS y javascript.">
+        <meta name="author" content="Nicolas Maldonado">
+        <title>Simon Dice</title>
+        <link rel="stylesheet" href="simon.css">
+        <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+  </head>
+
+  <body>
+      <div class="gameboard">
+          <div id = "verde"     class= "color verde left"     data-color = "verde"    > </div>
+          <div id = "rojo"      class= "color rojo right"     data-color = "rojo"     > </div>
+          <div id = "amarillo"  class= "color amarillo left"  data-color = "amarillo" > </div>
+          <div id = "azul"      class= "color azul right"     data-color = "azul"     > </div>
+      </div>
+
+      <button id="elbotonEmpezar" class = "boton-empieza" onclick = "comienzaJuego()" > ¡A jugar!      </button>
+      <button id="elbotonModo"    class = "boton-modo"    onclick = "ayuda()"         > Instrucciones  </button>
+
+      <table class="oculto prueba" id="formulario">
+        <tr>
+            <th style="text-align:left">Modo de juego</th>
+            <th style="text-align:left">Configuración</th>
+        </tr>
+        <tr>
+          <td><input type="radio" name="jugadas" value= 5 onclick = "parametrosJuego(this.value)"/>5 Jugadas</td>
+            <td><input type="radio" name="Sonido" value=1 checked="checked" onclick = "parametrosSonido(this.value)"/>Con sonido</td>
+        </tr>
+
+        <tr>
+          <td><input type="radio" name="jugadas" value = 8 onclick = "parametrosJuego(this.value)"/>8 Jugadas</td>
+          <td><input type="radio" name="Sonido" value=0 onclick = "parametrosSonido(this.value)"/>Sin sonido</td>
+        </tr>
+
+        <tr>
+          <td><input type="radio" name="jugadas" value = 11 onclick = "parametrosJuego(this.value)"/>11 Jugadas</td>
+          <td></td>
+        </tr>
+
+        <tr>
+          <td><input type="radio" name="jugadas" value = 200 checked="checked" onclick = "parametrosJuego(this.value)"/>Torneo (sin límite)</td>
+          <td></td>
+        </tr>
+
+
+        <tr>
+          <td> <button id="elbotonTodoListo" class = "boton-TodoListo" onclick = "cierraConfiguracion()"> Todo listo!! </button></td>
+        </tr>
+
+      </table>
+
+
+      <script type="text/javascript" src="simon.js">  </script>
+  </body>
+
+</html>

@@ -1,0 +1,140 @@
+body {
+  margin: 0;
+  background: #080808;
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Righteous', cursive;
+}
+
+.gameboard {
+  height: 600px;
+  width: 600px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto;
+  /*max-height: 70vh;
+  max-width: 70vh;*/
+}
+
+.color {
+  width: 50%;
+  height: 50%;
+  display: inline-block;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: left;
+}
+
+.verde {
+  background-image:url("imagenes/verde.png");
+}
+
+.verde.luz {
+  background-image:url("imagenes/verdeLuz.png");
+}
+
+.rojo {
+  background-image:url("imagenes/rojo.png");
+}
+
+.rojo.luz {
+  background-image:url("imagenes/rojoLuz.png");
+}
+
+.amarillo {
+  background-image:url("imagenes/amarillo.png");
+}
+
+.amarillo.luz {
+  background-image:url("imagenes/amarilloLuz.png");
+}
+
+.azul {
+  background-image:url("imagenes/azul.png");
+}
+
+.azul.luz {
+  background-image:url("imagenes/azulLuz.png");
+}
+
+.boton-empieza {
+  width: 140px;
+  height: 60px;
+  background: #111111;
+  opacity: 0;
+  color: azure;
+  font-family: 'Righteous', cursive;
+  font-size: 1.4rem;
+  position: absolute;
+  top: calc(50% - 90px);
+  left: calc(50% - 70px);
+  border-radius: 15px 25px 15px 25px;
+}
+.boton-empieza.luz {
+  width: 140px;
+  height: 50px;
+  background: #111111;
+  opacity: 0.4;
+  color: yellow;
+  font-family: 'Righteous', cursive;
+  font-size: 1.4rem;
+  position: absolute;
+  top: calc(50% - 90px);
+  left: calc(50% - 70px);
+  border-color : black;
+  border-width: 2px;
+  border-radius:  0px ;
+}
+
+.boton-modo {
+  width: 120px;
+  height: 35px;
+  background: #444444;
+  opacity: 0.5;
+  color: azure;
+  font-family: 'Jost', sans-serif;
+  font-size: 1rem;
+  position: absolute;
+  top: calc(50% + 50px);
+  left: calc(50% - 60px);
+  border-radius: 15px 25px 15px 25px;
+}
+
+.boton-TodoListo {
+  width: 120px;
+  height: 50px;
+  background: #444444;
+  color: azure;
+  font-family: 'Jost', sans-serif;
+  font-size: 1rem;
+  position: absolute;
+  top: calc(50% + 30px);
+  left: calc(50% + 40px);
+  border-radius: 15px 25px 15px 25px;
+}
+
+
+.prueba
+{
+  width: 340px;
+  height: 200px;
+  background: #111111;
+  color: azure;
+  font-size: 1rem;
+  position: absolute;
+  top: calc(50% - 100px);
+  left: calc(50% - 170px);
+  border-radius: 15px;
+  padding-left: 10px;
+
+}
+
+.oculto {
+  display: none;
+}
