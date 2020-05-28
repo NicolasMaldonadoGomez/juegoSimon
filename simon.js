@@ -1,54 +1,93 @@
-/* PENDIENTES:
-Crear una rutina de saludo que recorra todos los colores, Meter todo dentro de la clase
-Cuando pierda marcar el color que era antes de mensaje de perdida con ruido
-cuando gane musica de victoria*/
-
-const verde          = document.getElementById ('verde')
-const rojo           = document.getElementById ('rojo')
-const amarillo       = document.getElementById ('amarillo')
-const azul           = document.getElementById ('azul')
-const botonEmpieza   = document.getElementById ('elbotonEmpezar')
-const botonTodoListo = document.getElementById ('elbotonTodoListo')
-const botonModo      = document.getElementById ('elbotonModo')
-const configura      = document.getElementById('formulario')
-document.addEventListener("keyup", control)
-var conSonido   = true
-var mododeJuego = 200
-var tiempoparaJugar = 3000
-var cronoAyuda  = setTimeout(ayuda, 10000)
-var crono,storageAuxiliar=0
+                      document.addEventListener ("keyup" ,  control)
+const botonTodoListo = document. getElementById ('elbotonTodoListo')
+const botonEmpieza   =   document. getElementById ('elbotonEmpezar')
+const botonModo      =      document. getElementById ('elbotonModo')
+const configura      =       document. getElementById ('formulario')
+const amarillo       =         document. getElementById ('amarillo')
+const verde          =           document.  getElementById ('verde')
+const rojo           =            document.  getElementById ('rojo')
+const azul           =            document.  getElementById ('azul')
+var cronoAyuda       =                      setTimeout (ayuda,10000)
+var storageAuxiliar  = 0
+var tiempoparaJugar  = 3000
+var mododeJuego      = 5
+var conSonido        = true
+var crono
 
 class JuegoSimon {
-  constructor()
+  mensajeVictoriaYPuntaje                 ()
           {
-              this.instalaMaximoPuntaje()
-              this.inicializa()
-              this.generaSecuencia()
-              this.pasaAlSiguienteNivel()
+            if ((this.nivel-1)>=this.maximoPuntaje)
+              {
+                this.maximoPuntaje = this.nivel-1
+                storageAuxiliar = this.maximoPuntaje
+                if (!(this.noSoportaStorage())) localStorage.setItem("maximoNivelLlegadoDeSimonDice", this.maximoPuntaje)
+                avisaConMenu( '¡¡Ganaste y superaste el máximo nivel. Muy bien!!',
+                              'Llegaste hasta ' + (this.nivel - 1),
+                              'imagenes/gokuDios.png' )
+              }
+            else  avisaConMenu( "¡¡Ganaste!!",
+                                "Llegaste hasta " + (this.nivel-1) + ". Muy bien hecho,¡¡felicitaciones!! Aunque todavia te falta para alcanzar al mejor que ha sido de " + this.maximoPuntaje,
+                                "imagenes/gokuSS3.png")
+              this.eliminaEventosClic()
           }
-  inicializa()
+  ilumninaVerdeVictoria                   ()
           {
-              this.eligeColor             =           this.eligeColor.bind(this)
-              this.pasaAlSiguienteNivel   = this.pasaAlSiguienteNivel.bind(this)
-              this.iluminaColor           =         this.iluminaColor.bind(this)
-              this.perdioporTiempo        =      this.perdioporTiempo.bind(this)
-              this.iluminaSecuencia       =     this.iluminaSecuencia.bind(this)
-
-              botonEmpieza.classList.add('luz')
-              setTimeout(function(){ botonEmpieza.classList.remove('luz')
-                                     botonEmpieza.classList.add('oculto') }, 500)
-              botonModo.classList.add('oculto')
-
-              clearTimeout(cronoAyuda)
-
-              this.milisegundoVelocidad = 600
-              this.nivel =  1
-              this.colores=
+            for (let i=0;i<10;i++)
+              {
+                setTimeout(function(){verde.classList.add    ('luz')}, i * 150      )
+                setTimeout(function(){verde.classList.remove ('luz')}, i * 150 + 100)
+                if (conSonido)
                 {
-                    verde, rojo, amarillo, azul,
-                }   //Asigna la variable verde a su nombre, asi juego.colores
+                  var audio_url = 'sonidos/gana.ogg'
+                  var audio = new Audio(audio_url)
+                  audio.play()
+                }
+              }
           }
-  instalaMaximoPuntaje()
+  ilumninaColorDerrota                    ()
+                  {
+                    for (let i=0;i<10;i++)
+                      {
+                        setTimeout(function(){verde.classList.add    ('luz')}, i * 150      )
+                        setTimeout(function(){verde.classList.remove ('luz')}, i * 150 + 100)
+                        if (conSonido)
+                        {
+                          var audio_url = 'sonidos/gana.ogg'
+                          var audio = new Audio(audio_url)
+                          audio.play()
+                        }
+                      }
+                  }
+  cambiaNumeroPorColor              (numero)
+          {
+            switch (numero)
+                  {
+                      case 0: return 'verde'
+                      case 1: return 'rojo'
+                      case 2: return 'amarillo'
+                      case 3: return 'azul'
+                  }
+          }
+  cambiaColorPorNumero               (color)
+          {
+              switch (color)
+                  {
+                      case 'verde': return 0
+                      case 'rojo': return 1
+                      case 'amarillo': return 2
+                      case 'azul'  : return 3
+                  }
+          }
+  pasaAlSiguienteNivel                    ()
+          {
+              console.log("pasamos al siguiente nivel " + this.nivel)
+              this.subnivel=0
+              this.iluminaSecuencia()
+              this.agregaEventosClic()
+              crono=setTimeout(this.perdioporTiempo,(tiempoparaJugar+this.milisegundoVelocidad*this.nivel+300))
+          }
+  instalaMaximoPuntaje                    ()
             {
               if (this.noSoportaStorage() || localStorage.getItem("maximoNivelLlegadoDeSimonDice") == null)
                 {
@@ -66,7 +105,21 @@ class JuegoSimon {
                     //muestraMaximoPuntaje.textContent = maximoPuntaje
                   }
             }
-  noSoportaStorage()
+  eliminaEventosClic                      ()
+          {
+               this.colores.verde.removeEventListener('click', this.eligeColor)
+                this.colores.azul.removeEventListener('click', this.eligeColor)
+                this.colores.rojo.removeEventListener('click', this.eligeColor)
+            this.colores.amarillo.removeEventListener('click', this.eligeColor)
+          }
+  agregaEventosClic                       ()
+          {
+            this.colores.amarillo. addEventListener ('click', this.eligeColor   )
+            this.colores.verde.   addEventListener  ('click',  this.eligeColor  )
+            this.colores.azul.   addEventListener   ('click',   this.eligeColor )
+            this.colores.rojo.  addEventListener    ('click',    this.eligeColor)
+          }
+  noSoportaStorage                        ()
             {
               try
               {
@@ -81,50 +134,7 @@ class JuegoSimon {
                 return true
               }
             }
-  generaSecuencia()
-          {
-              this.secuencia = new Array (mododeJuego).fill(0).map(n=>Math.floor(Math.random()*4))
-          }                     //se usa fill para poder usar map y llenar el array,
-  pasaAlSiguienteNivel()
-          {
-              console.log("pasamos al siguiente nivel " + this.nivel)
-              this.subnivel=0
-              this.iluminaSecuencia()
-              this.agregaEventosClic()
-              crono=setTimeout(this.perdioporTiempo,(tiempoparaJugar+this.milisegundoVelocidad*this.nivel+300))
-
-          }
-  eligeColor(ev)
-    {
-      clearTimeout(crono)
-      const nombredelColor = ev.target.dataset.color
-      const numerodelColor=this.cambiaColorPorNumero(nombredelColor)
-      this.iluminaColor(nombredelColor)
-
-      if (numerodelColor===this.secuencia[this.subnivel])
-        {
-          this.subnivel++
-          if(this.subnivel===this.nivel)
-              {
-                this.nivel++
-                if(this.nivel === (mododeJuego + 1))
-                    {
-                        this.ganoJuego()
-                    }
-                else
-                    {
-                      setTimeout(this.pasaAlSiguienteNivel,this.milisegundoVelocidad)
-                    }
-              }
-          else crono = setTimeout(this.perdioporTiempo,tiempoparaJugar)
-        }
-      else
-        {
-          this.perdioJuego()
-        }
-
-    }
-  iluminaSecuencia()
+  iluminaSecuencia                        ()
           {
               for(let i = 0; i < this.nivel; i++)
                   {
@@ -136,129 +146,161 @@ class JuegoSimon {
                   this.milisegundoVelocidad = 350
                 }
           }
-  cambiaColorPorNumero(color)
+  perdioporTiempo                         ()
           {
-              switch (color)
-                  {
-                      case 'verde': return 0
-                      case 'rojo': return 1
-                      case 'amarillo': return 2
-                      case 'azul'  : return 3
-                  }
+            botonEmpieza.classList.remove("oculto")
+            botonModo.classList.remove("oculto")
+
+            if ((this.nivel-1)>=this.maximoPuntaje)
+              {
+                this.maximoPuntaje = this.nivel-1
+                storageAuxiliar = this.maximoPuntaje
+                if (!(this.noSoportaStorage())) localStorage.setItem("maximoNivelLlegadoDeSimonDice", this.maximoPuntaje)
+                avisaConMenu( '¡¡Superaste el máximo nivel. Muy bien!!',
+                              'Pero te demoraste mucho y perdiste por eso, Llegaste hasta ' + this.maximoPuntaje,
+                              'imagenes/gokuGana.jpg')
+              }
+            else avisaConMenu('No alcanzaste, pero...!',
+                              'Hiciste ' + (this.nivel-1) + ' jugadas.\nIntenta de nuevo, seguro puedes hacerlo mejor. El record está en ' + this.maximoPuntaje,
+                              'imagenes/gokuPierde.png')
+
+            this.eliminaEventosClic()
           }
-  cambiaNumeroPorColor(numero)
+  generaSecuencia                         ()
           {
-            switch (numero)
-                  {
-                      case 0: return 'verde'
-                      case 1: return 'rojo'
-                      case 2: return 'amarillo'
-                      case 3: return 'azul'
-                  }
-          }
-  iluminaColor(color)
+              this.secuencia = new Array (mododeJuego).fill(0).map(n=>Math.floor(Math.random()*4))
+          }                     //se usa fill para poder usar map y llenar el array,
+  iluminaColor                       (color)
           {
               if (conSonido==1) this.suenaColor(color)
               this.colores[color].classList.add('luz')
               setTimeout(()=>this.apagaColor(color),this.milisegundoVelocidad-100)
           }
-  apagaColor(color)
+  constructor                             ()
+          {
+              this.inicializa           ()
+              this.generaSecuencia      ()
+              this.instalaMaximoPuntaje ()
+              setTimeout(this.pasaAlSiguienteNivel, 520)
+              this.mensajeVictoriaYPuntaje = this.mensajeVictoriaYPuntaje.bind(this)
+          }
+  perdioJuego                             ()
+          {
+            clearTimeout(crono)
+            botonEmpieza.classList.remove("oculto")
+            botonModo.classList.remove("oculto")
+
+            if ((this.nivel-1)>=this.maximoPuntaje)
+              {
+                this.maximoPuntaje = this.nivel-1
+                storageAuxiliar = this.maximoPuntaje
+                if (!(this.noSoportaStorage())) localStorage.setItem("maximoNivelLlegadoDeSimonDice", this.maximoPuntaje)
+                avisaConMenu( '¡¡Superaste el máximo nivel. Muy bien!!',
+                              'Llegaste hasta ' + this.maximoPuntaje,
+                              'imagenes/gokuGana.jpg')
+              }
+            else avisaConMenu('Perdiste, pero...',
+                              'Hiciste ' + (this.nivel-1) + ' jugadas.\nIntenta de nuevo, seguro puedes hacerlo mejor :)\n' + 'El record está en ' + this.maximoPuntaje,
+                              'imagenes/MrSatan.jpg')
+
+            this.eliminaEventosClic()
+          }
+  inicializa                              ()
+          {
+              this.pasaAlSiguienteNivel   = this.pasaAlSiguienteNivel.bind(this)
+              this.iluminaSecuencia       =     this.iluminaSecuencia.bind(this)
+              this.perdioporTiempo        =      this.perdioporTiempo.bind(this)
+              this.iluminaColor           =         this.iluminaColor.bind(this)
+              this.eligeColor             =           this.eligeColor.bind(this)
+              botonEmpieza.classList.add('luz')
+              clearTimeout(cronoAyuda)
+              setTimeout(function()
+                {
+                  botonEmpieza.classList.remove('luz')
+                  botonEmpieza.classList.add('oculto')
+                }, 500)
+              botonModo.classList.add('oculto')
+              this.colores              = { verde, rojo, amarillo, azul, }   //Asigna la variable verde a su nombre, asi juego.colores
+              this.milisegundoVelocidad = 600
+              this.nivel                = 1
+          }
+  eligeColor                            (ev)
+          {
+            clearTimeout(crono)
+            const nombredelColor = ev.target.dataset.color
+            const numerodelColor=this.cambiaColorPorNumero(nombredelColor)
+            this.iluminaColor(nombredelColor)
+
+            if (numerodelColor===this.secuencia[this.subnivel])
+              {
+                this.subnivel++
+                if(this.subnivel===this.nivel)
+                    {
+                      this.nivel++
+                      if(this.nivel === (mododeJuego + 1))
+                          {
+                              this.ganoJuego()
+                          }
+                      else
+                          {
+                            setTimeout(this.pasaAlSiguienteNivel,this.milisegundoVelocidad)
+                          }
+                    }
+                else crono = setTimeout(this.perdioporTiempo,tiempoparaJugar)
+              }
+            else
+              {
+                this.perdioJuego()
+              }
+
+          }
+  suenaColor                         (color)
+          {
+
+            if (this.nivel>7)
+              {
+                var audio_url = `sonidos/${color}Corto.ogg`
+              } else var audio_url = `sonidos/${color}.ogg`
+                var audio = new Audio(audio_url)
+                audio.play()
+          }
+  apagaColor                         (color)
           {
               this.colores[color].classList.remove('luz')
           }
-  agregaEventosClic()
-    {
-      this.colores.verde.   addEventListener('click', this.eligeColor)
-      this.colores.azul.    addEventListener('click', this.eligeColor)
-      this.colores.rojo.    addEventListener('click', this.eligeColor)
-      this.colores.amarillo.addEventListener('click', this.eligeColor)
-    }
-  eliminaEventosClic()
-    {
-         this.colores.verde.removeEventListener('click', this.eligeColor)
-          this.colores.azul.removeEventListener('click', this.eligeColor)
-          this.colores.rojo.removeEventListener('click', this.eligeColor)
-      this.colores.amarillo.removeEventListener('click', this.eligeColor)
-
-    }
-  ganoJuego()
-    {
-      clearTimeout(crono)
-      botonEmpieza.classList.remove("oculto")
-      botonModo.classList.remove("oculto")
-      if ((this.nivel-1)>=this.maximoPuntaje)
-        {
-          this.maximoPuntaje = this.nivel-1
-          storageAuxiliar = this.maximoPuntaje
-          if (!(this.noSoportaStorage())) localStorage.setItem("maximoNivelLlegadoDeSimonDice", this.maximoPuntaje)
-          avisaConMenu( '¡¡Ganaste y superaste el máximo nivel. Muy bien!!',
-                        'Llegaste hasta ' + (this.nivel - 1),
-                        'imagenes/gokuDios.png' )
-        }
-      else  avisaConMenu( "¡¡Ganaste!!",
-                          "Llegaste hasta " + (this.nivel-1) + ". Muy bien hecho,¡¡felicitaciones!! Aunque todavia te falta para alcanzar al mejor que ha sido de " + this.maximoPuntaje,
-                          "imagenes/gokuSS3.png")
-      this.eliminaEventosClic()
-    }
-  perdioJuego()
-    {
-      clearTimeout(crono)
-      botonEmpieza.classList.remove("oculto")
-      botonModo.classList.remove("oculto")
-
-      if ((this.nivel-1)>=this.maximoPuntaje)
-        {
-          this.maximoPuntaje = this.nivel-1
-          storageAuxiliar = this.maximoPuntaje
-          if (!(this.noSoportaStorage())) localStorage.setItem("maximoNivelLlegadoDeSimonDice", this.maximoPuntaje)
-          avisaConMenu( '¡¡Superaste el máximo nivel. Muy bien!!',
-                        'Llegaste hasta ' + this.maximoPuntaje,
-                        'imagenes/gokuGana.jpg'  )
-        }
-      else avisaConMenu('Perdiste, pero...',
-                        'Hiciste ' + (this.nivel-1) + ' jugadas.\nIntenta de nuevo, seguro puedes hacerlo mejor :)\n' + 'El record está en ' + this.maximoPuntaje,
-                        'imagenes/MrSatan.jpg')
-
-      this.eliminaEventosClic()
-    }
-  perdioporTiempo()
-      {
-        botonEmpieza.classList.remove("oculto")
-        botonModo.classList.remove("oculto")
-
-        if ((this.nivel-1)>=this.maximoPuntaje)
+  ganoJuego                               ()
           {
-            this.maximoPuntaje = this.nivel-1
-            storageAuxiliar = this.maximoPuntaje
-            if (!(this.noSoportaStorage())) localStorage.setItem("maximoNivelLlegadoDeSimonDice", this.maximoPuntaje)
-            avisaConMenu( '¡¡Superaste el máximo nivel. Muy bien!!',
-                          'Pero te demoraste mucho y perdiste por eso, Llegaste hasta ' + this.maximoPuntaje,
-                          'imagenes/gokuGana.jpg' )
+            clearTimeout(crono)
+            botonEmpieza.classList.remove("oculto")
+            botonModo   .classList.remove("oculto")
+            console.log(this.nivel);
+            this.ilumninaVerdeVictoria()
+            setTimeout(this.mensajeVictoriaYPuntaje,1500)
           }
-        else avisaConMenu('No alcanzaste, pero...!',
-                          'Hiciste ' + (this.nivel-1) + ' jugadas.\nIntenta de nuevo, seguro puedes hacerlo mejor. El record está en ' + this.maximoPuntaje,
-                          'imagenes/gokuPierde.png')
-
-        this.eliminaEventosClic()
-      }
-  suenaColor(color)
-      {
-
-        if (this.nivel>7)
-          {
-            var audio_url = `sonidos/${color}Corto.ogg`
-          } else var audio_url = `sonidos/${color}.ogg`
-            var audio = new Audio(audio_url)
-            audio.play()
-      }
 }
-function comienzaJuego()
+simonSaluda()
+//lo siguiente quedó fuera de la clase ya que debía empezar antes del juego
+function cierraConfiguracion              ()
   {
-
+  configura.classList.add("oculto")
+  botonModo.classList.remove("oculto")
+}
+function parametrosSonido           (sonido)
+  {
+  if (sonido==1) conSonido=true
+  if (sonido==0) conSonido=false
+}
+function parametrosJuego              (modo)
+  {
+    mododeJuego = parseInt(modo)
+    console.log(mododeJuego);
+}
+function comienzaJuego                    ()
+  {
     window.juego = new JuegoSimon()
-  }
-function avisaConMenu(titulo,texto,icono)
-    {
+  } //***Inicio
+function avisaConMenu   (titulo,texto,icono)
+  {
         swal(
               {
               title    : titulo,
@@ -293,26 +335,38 @@ function avisaConMenu(titulo,texto,icono)
                                                                   break
                                                  }
                                 })
-    }
-function ayuda()
+    } //
+function simonSaluda                      ()
   {
-    clearTimeout(cronoAyuda);
-    avisaConMenu("¿Ayuda?", "Para empezar presiona el botón de encendido en toda la mitad, aunque primero deberías configurar el tipo de juego y el sonido con el boton [Configura] abajo. \nAtajos: J y ENTER para jugar, C para configurar, Q es acerca de y A es esta ayuda.\nEl objetivo del juego es repetir una secuencia de colores cada vez mas larga, primero el computador, luego tú. ¡¡Trata de hacer la mayor cantidad de turnos sin equivocarte!!","imagenes/KarinDB.png")
-  }
-function acercaDe(){
-  swal("Simulador de Simon Electronico", "Código por Nicolás Maldonado Gómez.\nemail: nico.m@gmx.es\nweb: https://techzigurat.000webhostapp.com/\n\nTrabajo final de la clase de fundamentos de javascript de Platzi.","imagenes/logoBlanco44.png")
+  setTimeout(function(){ amarillo .classList.add    ('luz')}, 020)
+  setTimeout(function(){ verde    .classList.add    ('luz')},  040)
+  setTimeout(function(){ rojo     .classList.add    ('luz')},   060)       //       funcion de saludo, pero tambien carga las imágenes       **
+  setTimeout(function(){ azul     .classList.add    ('luz')},    080)      //  para que quede listo en el juego. se repite parte del codigo  **
+  setTimeout(function(){ amarillo .classList.remove ('luz')},     100)     //  de la clases JuegoSimon, pero no encontre la manera de llamar **
+  setTimeout(function(){ verde    .classList.remove ('luz')},      120)    //      los metodos, y los tiempos son diferentes juego           **
+  setTimeout(function(){ rojo     .classList.remove ('luz')},       140)
+  setTimeout(function(){ azul     .classList.remove ('luz')},        160)
+
+  setTimeout(function(){ amarillo .classList.add    ('luz')}, 200)
+  setTimeout(function(){ verde    .classList.add    ('luz')},  300)
+  setTimeout(function(){ rojo     .classList.add    ('luz')},   400)
+  setTimeout(function(){ azul     .classList.add    ('luz')},    500)
+  setTimeout(function(){ amarillo .classList.remove ('luz')},     600)
+  setTimeout(function(){ verde    .classList.remove ('luz')},      700)
+  setTimeout(function(){ rojo     .classList.remove ('luz')},       800)
+  setTimeout(function(){ azul     .classList.remove ('luz')},        900)
 }
-function configurar()
+function configurar                       ()
   {
     clearTimeout(cronoAyuda);
     botonModo.classList.add("oculto")
     configura.classList.remove("oculto")
   }
-function cierraConfiguracion(){
-  configura.classList.add("oculto")
-  botonModo.classList.remove("oculto")
+function acercaDe                         ()
+  {
+  swal("Simulador de Simon Electronico", "Código por Nicolás Maldonado Gómez.\nemail: nico.m@gmx.es\nweb: https://techzigurat.000webhostapp.com/\n\nTrabajo final de la clase de fundamentos de javascript de Platzi.","imagenes/logoBlanco44.png")
 }
-function control(e)
+function control                         (e)
   {
     switch (e.key.toLowerCase()) {
       case "enter": comienzaJuego();        break;  // enter
@@ -322,7 +376,8 @@ function control(e)
       case "q":     acercaDe();             break;  // Q
     }
   }
-function parametrosJuego(modo){
-    mododeJuego = parseInt(modo)
-    console.log(mododeJuego);
-}
+function ayuda                            ()
+  {
+    clearTimeout(cronoAyuda);
+    avisaConMenu("¿Ayuda?", "Para empezar presiona el botón de encendido en toda la mitad, aunque primero deberías configurar el tipo de juego y el sonido con el boton [Configura] abajo. \nAtajos: J y ENTER para jugar, C para configurar, Q es acerca de y A es esta ayuda.\nEl objetivo del juego es repetir una secuencia de colores cada vez mas larga, primero el computador, luego tú. ¡¡Trata de hacer la mayor cantidad de turnos sin equivocarte!!\nSugerencia: en computador jugar a pantalla completa (F11)","imagenes/KarinDB.png")
+  }

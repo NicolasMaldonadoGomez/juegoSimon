@@ -22,7 +22,7 @@
       </div>
 
       <button id="elbotonEmpezar" class = "boton-empieza" onclick = "comienzaJuego()" > ¡A jugar!      </button>
-      <button id="elbotonModo"    class = "boton-modo"    onclick = "ayuda()"         > Instrucciones  </button>
+      <button id="elbotonModo"    class = "boton-modo"    onclick = "configurar()"         > Administración  </button>
 
       <table class="oculto prueba" id="formulario">
         <tr>
@@ -30,13 +30,13 @@
             <th style="text-align:left">Configuración</th>
         </tr>
         <tr>
-          <td><input type="radio" name="jugadas" value= 5 onclick = "parametrosJuego(this.value)"/>5 Jugadas</td>
-            <td><input type="radio" name="Sonido" value=1 checked="checked" onclick = "parametrosSonido(this.value)"/>Con sonido</td>
+          <td><input type="radio" name="jugadas" value = 5 onclick = "parametrosJuego (this.value)" checked = "checked" />5 Jugadas</td>
+          <td><input type="radio" name="Sonido"  value = 1 onclick = "parametrosSonido(this.value)" checked = "checked"/>Con sonido</td>
         </tr>
 
         <tr>
-          <td><input type="radio" name="jugadas" value = 8 onclick = "parametrosJuego(this.value)"/>8 Jugadas</td>
-          <td><input type="radio" name="Sonido" value=0 onclick = "parametrosSonido(this.value)"/>Sin sonido</td>
+          <td><input type="radio" name="jugadas" value = 8 onclick = "parametrosJuego (this.value)"/>8 Jugadas </td>
+          <td><input type="radio" name="Sonido"  value = 0 onclick = "parametrosSonido(this.value)"/>Sin sonido</td>
         </tr>
 
         <tr>
@@ -45,7 +45,7 @@
         </tr>
 
         <tr>
-          <td><input type="radio" name="jugadas" value = 200 checked="checked" onclick = "parametrosJuego(this.value)"/>Torneo (sin límite)</td>
+          <td><input type="radio" name="jugadas" value = 200 onclick = "parametrosJuego(this.value)"/>Torneo (sin límite)</td>
           <td></td>
         </tr>
 
