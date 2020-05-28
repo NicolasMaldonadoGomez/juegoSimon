@@ -322,10 +322,6 @@ function control(e)
       case "q":     acercaDe();             break;  // Q
     }
   }
-function parametrosSonido(sonido){
-    conSonido = sonido
-    console.log("Con sonido es " + conSonido)
-  }
 function parametrosJuego(modo){
     mododeJuego = parseInt(modo)
     console.log(mododeJuego);
