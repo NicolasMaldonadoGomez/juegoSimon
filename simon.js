@@ -379,7 +379,7 @@ function configurar                       ()
   }
 function acercaDe                         ()
   {
-  swal("Simulador de Simon Electronico", "Código por Nicolás Maldonado Gómez.\nemail: nico.m@gmx.es\nweb: https://techzigurat.000webhostapp.com/\n\nTrabajo final de la clase de fundamentos de javascript de Platzi.","imagenes/logoBlanco44.png")
+  swal("Simulador de Simon Electronico", "Código por Nicolás Maldonado Gómez.\nCronos Ingenieria\nnico.m@gmx.es\nhttps://techzigurat.000webhostapp.com/\n\nTrabajo final de la clase de fundamentos de javascript de Platzi.","imagenes/logoBlanco44.png")
 }
 function control                         (e)
   {
